@@ -30,7 +30,7 @@ services:
       WORDPRESS_DB_PASSWORD: wordpresspassword
     volumes:
       - wordpress_data:/var/www/html
-#      - ./php-fpm.conf:/usr/local/etc/php-fpm.d/custom.conf:ro
+      - ./php-fpm.conf:/usr/local/etc/php-fpm.d/custom.conf:ro
     networks:
       - wordpress_network
 
