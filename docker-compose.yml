@@ -108,6 +108,19 @@ services:
     networks:
       - wordpress_network
 
+  blackbox-exporter:
+    image: prom/blackbox-exporter:latest
+    container_name: blackbox_exporter
+    restart: always
+    ports:
+    - "9115:9115"
+    volumes:
+    - ./blackbox.yml:/etc/blackbox_exporter/blackbox.yml:ro
+    networks:
+    - wordpress_network
+
+
+
 volumes:
   db_data:
   wordpress_data:

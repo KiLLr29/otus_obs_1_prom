@@ -22,6 +22,17 @@ scrape_configs:
     static_configs:
       - targets: ['mysql_exporter:9104']
 
-  - job_name: 'cadvisor'
+  - job_name: 'blackbox'
+    metrics_path: /probe
+    params:
+      module: [http_2xx]  # Используемый модуль из blackbox.yml
     static_configs:
-      - targets: ['cadvisor:8080']
+      - targets:
+          - http://localhost  # Адрес для проверки
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox_exporter:9115  # Адрес Blackbox Exporter
