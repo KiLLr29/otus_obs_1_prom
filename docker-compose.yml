@@ -35,7 +35,7 @@ services:
 
   # Служба для Nginx
   nginx:
-    image: nginx:alpine
+    image: nginx:latest
     container_name: wordpress_nginx
     restart: always
     depends_on:
