@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  # Служба для базы данных MariaDB
+  db:
+    image: mariadb:latest
+    container_name: wordpress_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpresspassword
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - wordpress_network
+
+  # Служба для PHP-FPM
+  php:
+    image: wordpress:6-php8.3-fpm
+    container_name: wordpress_php
+    restart: always
+    depends_on:
+      - db
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpresspassword
+    volumes:
+      - wordpress_data:/var/www/html
+    networks:
+      - wordpress_network
+
+  # Служба для Nginx
+  nginx:
+    image: nginx:alpine
+    container_name: wordpress_nginx
+    restart: always
+    depends_on:
+      - php
+    ports:
+      - "80:80"
+    volumes:
+      - wordpress_data:/var/www/html
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - wordpress_network
+
+volumes:
+  db_data:
+  wordpress_data:
+
+networks:
+  wordpress_network:
