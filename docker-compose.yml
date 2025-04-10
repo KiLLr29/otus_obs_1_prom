@@ -89,7 +89,7 @@ services:
     container_name: mysql_exporter
     restart: always
     volumes:
-      - ./my.cnf:/root/.my.cnf:ro
+      - ./my.cnf:/.my.cnf:ro
     ports:
       - "9104:9104"
     networks:
