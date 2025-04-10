@@ -89,7 +89,7 @@ services:
     container_name: mysql_exporter
     restart: always
     environment:
-      DATA_SOURCE_NAME: "wordpress:wordpresspassword@(db:3306)/"
+      DATA_SOURCE_NAME: "wordpress:wordpresspassword@(db:3306)/wordpress"
     ports:
       - "9104:9104"
     networks:
