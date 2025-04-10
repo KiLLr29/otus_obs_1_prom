@@ -95,6 +95,18 @@ services:
     networks:
       - wordpress_network
 
+  # PHP-FPM Exporter
+  php-fpm-exporter:
+    image: bitnami/php-fpm-exporter:latest
+    container_name: php_fpm_exporter
+    restart: always
+    environment:
+      PHP_FPM_SCRAPE_URI: "tcp://php:9000/status"
+    ports:
+      - "9253:9253"
+    networks:
+      - wordpress_network
+
 volumes:
   db_data:
   wordpress_data:
