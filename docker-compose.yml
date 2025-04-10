@@ -97,7 +97,7 @@ services:
 
   # PHP-FPM Exporter
   php-fpm-exporter:
-    image: bitnami/php-fpm-exporter:latest
+    image: hipages/php-fpm_exporter:latest
     container_name: php_fpm_exporter
     restart: always
     environment:
