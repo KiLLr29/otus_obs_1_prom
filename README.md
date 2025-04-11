@@ -36,5 +36,5 @@ docker-compose up -d
 wordpress: http://localhost
 prometheus: https://localhost:8081
 пользователь и пароль:
-promethues_user
+prometheus_user
 eVrIQpGoPhZArqYRV7nJ
