@@ -112,11 +112,24 @@ services:
     networks:
     - wordpress_network
 
-
+  victoria-metrics:
+    image: victoriametrics/victoria-metrics:latest
+    container_name: victoria_metrics
+    restart: always
+    ports:
+      - "8428:8428"
+    command:
+      - "--storageDataPath=/storage"
+      - "--retentionPeriod=1y"
+    volumes:
+      - victoria_metrics_data:/storage
+    networks:
+      - wordpress_network
 
 volumes:
   db_data:
   wordpress_data:
+  victoria_metrics_data:
 
 networks:
   wordpress_network:
