@@ -113,7 +113,7 @@ services:
     - wordpress_network
 
   victoria-metrics:
-    image: victoriametrics/victoria-metrics:latest
+    image: victoriametrics/victoria-metrics:v1.110.5-enterprise
     container_name: victoria_metrics
     restart: always
     ports:
