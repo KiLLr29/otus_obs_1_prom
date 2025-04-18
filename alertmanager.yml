@@ -1,0 +1,31 @@
+global:
+  resolve_timeout: 5m
+
+route:
+  group_by: ['alertname', 'severity']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 1h
+  receiver: 'telegram-warning'
+  routes:
+    - match:
+        severity: critical
+      receiver: 'telegram-critical'
+    - match:
+        severity: warning
+      receiver: 'telegram-warning'
+
+receivers:
+  - name: 'telegram-warning'
+    telegram_configs:
+      - bot_token: '7528494073:AAFjRa7QZOlKt51nalOURBaT68ycTFbFawQ'
+        chat_id: 'OTUS_TEST_Warning'
+        parse_mode: 'HTML'
+        message: '⚠️ <b>{{ .CommonLabels.alertname }}</b>\n{{ .CommonAnnotations.description }}'
+
+  - name: 'telegram-critical'
+    telegram_configs:
+      - bot_token: '7528494073:AAFjRa7QZOlKt51nalOURBaT68ycTFbFawQ'
+        chat_id: 'OTUS_TEST_Critical'
+        parse_mode: 'HTML'
+        message: '🚨 <b>{{ .CommonLabels.alertname }}</b>\n{{ .CommonAnnotations.description }}'

@@ -1,7 +1,17 @@
 global:
   scrape_interval: 5s
+  evaluation_interval: 5s
   external_labels:
     site: prod
+
+rule_files:
+  - /etc/prometheus/prometheus-rules.yml
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          - alertmanager:9093
 
 remote_write:
   - url: "http://victoria-metrics:8428/api/v1/write"
