@@ -19,13 +19,43 @@ receivers:
   - name: 'telegram-warning'
     telegram_configs:
       - bot_token: '7528494073:AAFjRa7QZOlKt51nalOURBaT68ycTFbFawQ'
-        chat_id: 'OTUS_TEST_Warning'
+        chat_id: -4628836738
         parse_mode: 'HTML'
-        message: '⚠️ <b>{{ .CommonLabels.alertname }}</b>\n{{ .CommonAnnotations.description }}'
+        message: |
+          {{- if eq .Status "firing" -}}
+          ⚠️ <b>Warning Alert</b>
+          
+          🔔 <b>Alert:</b> {{ .CommonLabels.alertname }}
+          ⚡ <b>Status:</b> {{ .Status | toUpper }}
+          ⚜️ <b>Severity:</b> {{ .CommonLabels.severity }}
+          📝 <b>Description:</b> {{ .CommonAnnotations.description }}
+          ⏰ <b>Started:</b> {{ .StartsAt.UTC.Format "2006-01-02 15:04:05 UTC" }}
+          {{- else -}}
+          ✅ <b>Warning Alert Resolved</b>
+          
+          🔔 <b>Alert:</b> {{ .CommonLabels.alertname }}
+          📝 <b>Description:</b> {{ .CommonAnnotations.description }}
+          ⏰ <b>Resolved:</b> {{ .EndsAt.UTC.Format "2006-01-02 15:04:05 UTC" }}
+          {{- end -}}
 
   - name: 'telegram-critical'
     telegram_configs:
       - bot_token: '7528494073:AAFjRa7QZOlKt51nalOURBaT68ycTFbFawQ'
-        chat_id: 'OTUS_TEST_Critical'
+        chat_id: -4774486192
         parse_mode: 'HTML'
-        message: '🚨 <b>{{ .CommonLabels.alertname }}</b>\n{{ .CommonAnnotations.description }}'
+        message: |
+          {{- if eq .Status "firing" -}}
+          🚨 <b>Critical Alert</b>
+          
+          🔔 <b>Alert:</b> {{ .CommonLabels.alertname }}
+          ⚡ <b>Status:</b> {{ .Status | toUpper }}
+          ⚜️ <b>Severity:</b> {{ .CommonLabels.severity }}
+          📝 <b>Description:</b> {{ .CommonAnnotations.description }}
+          ⏰ <b>Started:</b> {{ .StartsAt.UTC.Format "2006-01-02 15:04:05 UTC" }}
+          {{- else -}}
+          ✅ <b>Critical Alert Resolved</b>
+          
+          🔔 <b>Alert:</b> {{ .CommonLabels.alertname }}
+          📝 <b>Description:</b> {{ .CommonAnnotations.description }}
+          ⏰ <b>Resolved:</b> {{ .EndsAt.UTC.Format "2006-01-02 15:04:05 UTC" }}
+          {{- end -}}
