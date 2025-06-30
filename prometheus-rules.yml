@@ -1,0 +1,46 @@
+groups:
+  - name: Exporters
+    rules:
+      - alert: ExporterDown
+        expr: up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          description: "Exporter {{ $labels.job }} is down"
+
+  - name: Node
+    rules:
+      - alert: HighCPUUsage
+        expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          description: "CPU usage is above 80% on {{ $labels.instance }}"
+
+      - alert: HighMemoryUsage
+        expr: (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes * 100 > 90
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          description: "Memory usage is above 90% on {{ $labels.instance }}"
+
+  - name: WordPress
+    rules:
+      - alert: NginxHighErrorRate
+        expr: rate(nginx_http_requests_total{status=~"5.."}[5m]) > 1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          description: "Nginx is returning 5xx errors"
+
+      - alert: MySQLHighThreadsRunning
+        expr: mysql_global_status_threads_running > 25
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          description: "MySQL has too many running threads"

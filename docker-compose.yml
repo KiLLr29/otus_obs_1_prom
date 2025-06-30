@@ -66,7 +66,21 @@ services:
       - '--storage.tsdb.path=/prometheus'
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus-rules.yml:/etc/prometheus/prometheus-rules.yml
       - prometheus_data:/prometheus
+    networks:
+      - wordpress_network
+
+  # Alertmanager
+  alertmanager:
+    image: prom/alertmanager:latest
+    container_name: alertmanager
+    restart: always
+    volumes:
+      - ./alertmanager.yml:/etc/alertmanager/alertmanager.yml
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
+      - '--storage.path=/alertmanager'
     networks:
       - wordpress_network
 
@@ -131,11 +145,28 @@ services:
     networks:
       - wordpress_network
 
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_INSTALL_PLUGINS: grafana-clock-panel,grafana-simple-json-datasource
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    networks:
+      - wordpress_network
+
 volumes:
   db_data:
   wordpress_data:
   victoria_metrics_data:
   prometheus_data:
+  grafana_data:
 
 networks:
   wordpress_network:
